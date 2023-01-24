@@ -1,10 +1,7 @@
 import { Component } from 'react';
-import { createPortal } from 'react-dom';
 import { queryImages } from 'services/api';
 import { Searchbar, ImageGallery, Button, Loader, Modal } from 'components';
-
-const modalRootRef = document.getElementById('modal-root');
-console.log(modalRootRef);
+import css from './App.module.css';
 
 export default class App extends Component {
   state = {
@@ -56,7 +53,7 @@ export default class App extends Component {
     const { isLoading, hasMoreImages, images, isModalVisible, imageURL, alt } =
       this.state;
     return (
-      <div className="App">
+      <div className={css.app}>
         <Searchbar onSubmit={this.onQuery} />
 
         <ImageGallery images={images} onClick={this.handleGalleryClick} />
@@ -67,13 +64,11 @@ export default class App extends Component {
           <Button onClick={this.loadMore}>Load more</Button>
         )}
 
-        {isModalVisible &&
-          createPortal(
-            <Modal onClose={this.hideModal}>
-              <img src={imageURL} alt={alt} />
-            </Modal>,
-            modalRootRef
-          )}
+        {isModalVisible && (
+          <Modal onClose={this.hideModal}>
+            <img src={imageURL} alt={alt} />
+          </Modal>
+        )}
       </div>
     );
   }

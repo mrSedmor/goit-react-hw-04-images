@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { Formik, Form, Field } from 'formik';
 import * as yup from 'yup';
+import css from './Searchbar.module.css';
 
 const schema = yup.object().shape({
   query: yup.string().trim().required(),
@@ -13,20 +14,20 @@ export default function Searchbar({ onSubmit }) {
   };
 
   return (
-    <header className="Searchbar">
+    <header className={css.searchbar}>
       <Formik
         initialValues={{ query: '' }}
         validationSchema={schema}
         onSubmit={handleSubmit}
       >
-        <Form className="SearchForm">
-          <button type="submit" className="SearchForm-button">
-            <span className="SearchForm-button-label">Search</span>
+        <Form className={css.form}>
+          <button type="submit" className={css.button}>
+            <span className={css.buttonLabel}>Search</span>
           </button>
 
           <Field
             name="query"
-            className="SearchForm-input"
+            className={css.input}
             type="text"
             autoComplete="off"
             autoFocus

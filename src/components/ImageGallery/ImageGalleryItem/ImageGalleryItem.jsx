@@ -1,14 +1,10 @@
 import PropTypes from 'prop-types';
+import css from './ImageGalleryItem.module.css';
 
-export default function ImageGalleryItem({
-  imageURL,
-  largeImageURL,
-  alt,
-  onClick,
-}) {
+export default function ImageGalleryItem({ imageURL, alt, onClick }) {
   return (
-    <li className="ImageGalleryItem" onClick={onClick}>
-      <img className="ImageGalleryItem-image" src={imageURL} alt={alt} />
+    <li className={css.item} onClick={onClick}>
+      <img className={css.image} src={imageURL} alt={alt} />
     </li>
   );
 }
