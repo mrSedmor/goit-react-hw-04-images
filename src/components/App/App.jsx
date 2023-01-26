@@ -10,16 +10,23 @@ import {
 } from 'components';
 import css from './App.module.css';
 
+const STAGE = {
+  INITIAL: 'initial',
+  LOADING: 'loading',
+  ERROR: 'error',
+  LOADED: 'loaded',
+  LOADED_ALL: 'loaded-all',
+};
+
 export default class App extends Component {
   state = {
     images: [],
-    isLoading: false,
-    hasMoreImages: false,
     imageURL: null,
     alt: null,
     page: null,
     query: null,
     error: null,
+    stage: STAGE.INITIAL,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -30,20 +37,19 @@ export default class App extends Component {
     }
 
     this.setState({
-      isLoading: true,
-      error: null,
-      hasMoreImages: false,
+      stage: STAGE.LOADING,
     });
 
     queryImages({ page, query })
       .then(({ hasMoreImages, images: newImages }) =>
         this.setState({
-          hasMoreImages,
+          stage: hasMoreImages ? STAGE.LOADED : STAGE.LOADED_ALL,
           images: [...images, ...newImages],
         })
       )
-      .catch(error => this.setState({ error: error.message }))
-      .finally(() => this.setState({ isLoading: false }));
+      .catch(error =>
+        this.setState({ stage: STAGE.ERROR, error: error.message, query: null })
+      );
   }
 
   handleQueryImages = query => {
@@ -67,24 +73,23 @@ export default class App extends Component {
   };
 
   render() {
-    const { isLoading, hasMoreImages, images, imageURL, alt, error } =
-      this.state;
-    const hasImages = images.length > 0;
+    const { images, imageURL, alt, error, stage } = this.state;
     const isModalVisible = Boolean(imageURL);
 
     return (
       <div className={css.app}>
-        <Searchbar onSubmit={this.handleQueryImages} isSubmitting={isLoading} />
+        <Searchbar
+          onSubmit={this.handleQueryImages}
+          isSubmitting={stage === STAGE.LOADING}
+        />
 
-        {error && <Error message={error} />}
+        <ImageGallery images={images} onClick={this.handleGalleryClick} />
 
-        {hasImages && (
-          <ImageGallery images={images} onClick={this.handleGalleryClick} />
-        )}
+        {stage === STAGE.ERROR && <Error message={error} />}
 
-        {isLoading && <Loader />}
+        {stage === STAGE.LOADING && <Loader />}
 
-        {hasMoreImages && !isLoading && (
+        {stage == STAGE.LOADED && (
           <Button onClick={this.loadMore}>Load more</Button>
         )}
 
