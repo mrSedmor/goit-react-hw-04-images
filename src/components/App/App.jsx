@@ -89,7 +89,7 @@ export default class App extends Component {
 
         {stage === STAGE.LOADING && <Loader />}
 
-        {stage == STAGE.LOADED && (
+        {stage === STAGE.LOADED && (
           <Button onClick={this.loadMore}>Load more</Button>
         )}
 
