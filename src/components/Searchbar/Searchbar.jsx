@@ -7,7 +7,7 @@ const schema = yup.object().shape({
   query: yup.string().trim().required(),
 });
 
-export default function Searchbar({ onSubmit, isSubmitting }) {
+export default function Searchbar({ onSubmit }) {
   const handleSubmit = async ({ query }, { resetForm }) => {
     await onSubmit(query.trim().toLowerCase());
     resetForm();
