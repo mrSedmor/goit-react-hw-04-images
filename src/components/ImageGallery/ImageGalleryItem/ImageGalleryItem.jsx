@@ -3,13 +3,14 @@ import css from './ImageGalleryItem.module.css';
 
 export default function ImageGalleryItem({ imageURL, alt, onClick }) {
   return (
-    <li className={css.item} onClick={onClick}>
-      <img className={css.image} src={imageURL} alt={alt} />
+    <li className={css.item}>
+      <img className={css.image} src={imageURL} alt={alt} onClick={onClick} />
     </li>
   );
 }
 
 ImageGalleryItem.defaultProps = {
+  onClick: () => null,
   alt: '',
 };
 

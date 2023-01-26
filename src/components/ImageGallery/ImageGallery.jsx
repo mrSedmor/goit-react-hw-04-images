@@ -18,6 +18,7 @@ export default function ImageGallery({ images, onClick }) {
 }
 
 ImageGallery.defaultProps = {
+  onClick: () => null,
   images: [],
 };
 
@@ -25,4 +26,5 @@ ImageGallery.propTypes = {
   images: PropTypes.arrayOf(
     PropTypes.shape({ id: PropTypes.number.isRequired })
   ).isRequired,
+  onClick: PropTypes.func,
 };

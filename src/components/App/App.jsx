@@ -8,55 +8,49 @@ export default class App extends Component {
     images: [],
     isLoading: false,
     hasMoreImages: false,
-    isModalVisible: false,
-    imageURL: '',
+    imageURL: null,
     alt: '',
   };
 
   loadImages = async query => {
-    try {
-      this.setState({ isLoading: true });
-      if (query) {
-        this.setState({ hasMoreImages: false, images: [] });
-        window.scrollTo(0, 0);
-      }
-      const queryResult = await queryImages(query);
-      const { hasMoreImages, images } = queryResult;
-
-      this.setState(prevState => ({
-        images: [...prevState.images, ...images],
-        hasMoreImages,
-      }));
-    } finally {
-      this.setState({ isLoading: false });
+    this.setState({ isLoading: true });
+    if (query) {
+      this.setState({ hasMoreImages: false, images: [] });
+      window.scrollTo(0, 0);
     }
+    const queryResult = await queryImages(query);
+    const { hasMoreImages, images } = queryResult;
+
+    this.setState(prevState => ({
+      images: [...prevState.images, ...images],
+      hasMoreImages,
+    }));
+
+    this.setState({ isLoading: false });
   };
 
-  onQuery = async query => {
-    this.loadImages(query);
-  };
-
-  loadMore = async () => {
-    this.loadImages();
-  };
-
+  handleQueryImages = query => this.loadImages(query);
+  loadMore = () => this.loadImages();
   handleGalleryClick = ({ imageURL, alt }) => {
-    console.log(imageURL, alt);
-    this.setState({ imageURL, alt, isModalVisible: true });
+    this.setState({ imageURL, alt });
   };
 
   hideModal = () => {
-    this.setState({ isModalVisible: false });
+    this.setState({ imageURL: null });
   };
 
   render() {
-    const { isLoading, hasMoreImages, images, isModalVisible, imageURL, alt } =
-      this.state;
+    const { isLoading, hasMoreImages, images, imageURL, alt } = this.state;
+    const hasImages = images.length > 0;
+    const isModalVisible = Boolean(imageURL);
+
     return (
       <div className={css.app}>
-        <Searchbar onSubmit={this.onQuery} />
+        <Searchbar onSubmit={this.handleQueryImages} />
 
-        <ImageGallery images={images} onClick={this.handleGalleryClick} />
+        {hasImages && (
+          <ImageGallery images={images} onClick={this.handleGalleryClick} />
+        )}
 
         {isLoading && <Loader />}
 

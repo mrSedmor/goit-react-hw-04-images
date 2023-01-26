@@ -30,24 +30,28 @@ export async function queryImages(newQuery) {
   page = query === trimmedQuery ? page + 1 : 1;
   query = trimmedQuery;
 
-  const results = await axios.get('', {
-    params: {
-      ...DEFAULT_GET_PARAMS,
-      q: query,
-      page,
-    },
-  });
+  try {
+    const response = await axios.get('', {
+      params: {
+        ...DEFAULT_GET_PARAMS,
+        q: query,
+        page,
+      },
+    });
 
-  const data = results.data;
-  const totalPages = Math.ceil(data.totalHits / IMAGES_PER_PAGE);
+    const data = response.data;
+    const totalPages = Math.ceil(data.totalHits / IMAGES_PER_PAGE);
 
-  return {
-    hasMoreImages: totalPages > page,
-    images: data.hits.map(({ id, webformatURL, largeImageURL, tag }) => ({
-      id,
-      webformatURL,
-      largeImageURL,
-      alt: tag,
-    })),
-  };
+    return {
+      hasMoreImages: totalPages > page,
+      images: data.hits.map(({ id, webformatURL, largeImageURL, tags }) => ({
+        id,
+        webformatURL,
+        largeImageURL,
+        alt: tags,
+      })),
+    };
+  } catch {
+    return EMPTY_RESULT;
+  }
 }
