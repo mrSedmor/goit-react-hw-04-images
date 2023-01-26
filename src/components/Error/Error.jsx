@@ -9,3 +9,7 @@ export default function Error({ message }) {
     </div>
   );
 }
+
+Error.propTypes = {
+  message: PropTypes.string.isRequired,
+};
