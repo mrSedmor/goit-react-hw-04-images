@@ -1,13 +1,6 @@
 import { Component } from 'react';
 import { queryImages } from 'services/api';
-import {
-  Searchbar,
-  ImageGallery,
-  Button,
-  Loader,
-  Modal,
-  Error,
-} from 'components';
+import { Searchbar, ImageGallery, Button, Loader, Error } from 'components';
 import css from './App.module.css';
 
 const STAGE = {
@@ -21,8 +14,6 @@ const STAGE = {
 export default class App extends Component {
   state = {
     images: [],
-    imageURL: null,
-    alt: null,
     page: null,
     query: null,
     error: null,
@@ -48,12 +39,12 @@ export default class App extends Component {
         })
       )
       .catch(error =>
-        this.setState({ stage: STAGE.ERROR, error: error.message, query: null })
+        this.setState({ stage: STAGE.ERROR, error: error.message })
       );
   }
 
   handleQueryImages = query => {
-    if (!query || query === this.state.query) {
+    if (!query) {
       return;
     }
 
@@ -64,17 +55,8 @@ export default class App extends Component {
     this.setState(({ page }) => ({ page: page + 1 }));
   };
 
-  handleGalleryClick = ({ imageURL, alt }) => {
-    this.setState({ imageURL, alt });
-  };
-
-  hideModal = () => {
-    this.setState({ imageURL: null });
-  };
-
   render() {
-    const { images, imageURL, alt, error, stage } = this.state;
-    const isModalVisible = Boolean(imageURL);
+    const { images, error, stage } = this.state;
 
     return (
       <div className={css.app}>
@@ -83,7 +65,7 @@ export default class App extends Component {
           isSubmitting={stage === STAGE.LOADING}
         />
 
-        <ImageGallery images={images} onClick={this.handleGalleryClick} />
+        <ImageGallery images={images} />
 
         {stage === STAGE.ERROR && <Error message={error} />}
 
@@ -91,12 +73,6 @@ export default class App extends Component {
 
         {stage === STAGE.LOADED && (
           <Button onClick={this.loadMore}>Load more</Button>
-        )}
-
-        {isModalVisible && (
-          <Modal onClose={this.hideModal}>
-            <img src={imageURL} alt={alt} />
-          </Modal>
         )}
       </div>
     );
