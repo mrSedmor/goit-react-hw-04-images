@@ -8,10 +8,12 @@ const modalRoot = document.querySelector('#modal-root');
 export default class Modal extends Component {
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeyDown);
+    document.documentElement.classList.add(css.blockScroll);
   }
 
   componentWillUnmount() {
     window.removeEventListener('keydown', this.handleKeyDown);
+    document.documentElement.classList.remove(css.blockScroll);
   }
 
   handleKeyDown = ({ code }) => {
