@@ -3,19 +3,19 @@ import axios from 'axios';
 const AUTH_TOKEN = '30641317-2c1589b9e698647cbb48b6071';
 const IMAGES_PER_PAGE = 12;
 
-axios.defaults.baseURL = 'https://pixabay.com/';
-
-const DEFAULT_GET_PARAMS = {
-  key: AUTH_TOKEN,
-  image_type: 'photo',
-  orientation: 'horizontal',
-  per_page: IMAGES_PER_PAGE,
-};
+const instance = axios.create({
+  baseURL: 'https://pixabay.com/api',
+  params: {
+    key: AUTH_TOKEN,
+    image_type: 'photo',
+    orientation: 'horizontal',
+    per_page: IMAGES_PER_PAGE,
+  },
+});
 
 export async function queryImages({ page, query }) {
-  const response = await axios.get('api/', {
+  const response = await instance.get('/', {
     params: {
-      ...DEFAULT_GET_PARAMS,
       q: query,
       page,
     },
