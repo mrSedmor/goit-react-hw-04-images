@@ -8,9 +8,8 @@ const schema = yup.object().shape({
 });
 
 export default function Searchbar({ onSubmit, isSubmitting }) {
-  const handleSubmit = ({ query }, { resetForm }) => {
+  const handleSubmit = ({ query }, _) => {
     onSubmit(query.trim().toLowerCase());
-    resetForm();
   };
 
   return (

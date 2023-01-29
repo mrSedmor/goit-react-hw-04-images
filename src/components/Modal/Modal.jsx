@@ -22,10 +22,16 @@ export default class Modal extends Component {
     }
   };
 
+  handleClick = ({ target, currentTarget }) => {
+    if (target === currentTarget) {
+      this.props.onClose();
+    }
+  };
+
   render() {
-    const { children, onClose } = this.props;
+    const { children } = this.props;
     return createPortal(
-      <div className={css.overlay} onClick={onClose}>
+      <div className={css.overlay} onClick={this.handleClick}>
         <div className={css.modal}>{children}</div>
       </div>,
       modalRoot

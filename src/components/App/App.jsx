@@ -44,7 +44,7 @@ export default class App extends Component {
   }
 
   handleQueryImages = query => {
-    if (!query) {
+    if (!query || query === this.state.query) {
       return;
     }
 
