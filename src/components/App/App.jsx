@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import * as api from 'services/api';
 import { Searchbar, ImageGallery, Button, Loader, Error } from 'components';
 import css from './App.module.css';
@@ -36,19 +36,22 @@ export default function App() {
       });
   }, [page, query]);
 
-  const handleQueryImages = newQuery => {
-    if (!newQuery || newQuery === query) {
-      return;
-    }
+  const handleQueryImages = useCallback(
+    newQuery => {
+      if (!newQuery || newQuery === query) {
+        return;
+      }
 
-    setPage(1);
-    setQuery(newQuery);
-    setImages([]);
-  };
+      setPage(1);
+      setQuery(newQuery);
+      setImages([]);
+    },
+    [query]
+  );
 
-  const loadMore = () => {
+  const loadMore = useCallback(() => {
     setPage(page => page + 1);
-  };
+  }, []);
 
   return (
     <div className={css.app}>
