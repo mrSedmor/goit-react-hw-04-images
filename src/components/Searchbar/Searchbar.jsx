@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Formik, Form, Field } from 'formik';
 import * as yup from 'yup';
@@ -8,10 +9,12 @@ const schema = yup.object().shape({
 });
 
 export default function Searchbar({ onSubmit, isSubmitting }) {
-  const handleSubmit = ({ query }, _) => {
-    onSubmit(query.trim().toLowerCase());
-  };
-
+  const handleSubmit = useCallback(
+    ({ query }, _) => {
+      onSubmit(query.trim().toLowerCase());
+    },
+    [onSubmit]
+  );
   return (
     <header className={css.searchbar}>
       <Formik

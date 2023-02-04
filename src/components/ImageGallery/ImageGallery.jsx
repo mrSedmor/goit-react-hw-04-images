@@ -1,8 +1,9 @@
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import ImageGalleryItem from './ImageGalleryItem/ImageGalleryItem';
 import css from './ImageGallery.module.css';
 
-export default function ImageGallery({ images }) {
+function ImageGallery({ images }) {
   return (
     <ul className={css.gallery}>
       {images.map(({ id, ...imageData }) => (
@@ -11,6 +12,8 @@ export default function ImageGallery({ images }) {
     </ul>
   );
 }
+
+export default memo(ImageGallery);
 
 ImageGallery.defaultProps = {
   images: [],
